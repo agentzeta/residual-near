@@ -101,3 +101,31 @@ test('end to end against a mock RPC: pinned reads, delegate enrollments, failure
   assert.deepEqual(states, ['CLASSICAL_ONLY', 'INCOMPLETE_WEAKEST_LINK', 'UNDETERMINED']);
   assert.equal(recs[2].status, 'ACCOUNT_NOT_FOUND');
 });
+
+
+test('RPC pool falls back on HTTP 429 and retains pinned block parameters', async () => {
+  let clock = 0;
+  const calls = [];
+  const fetchImpl = async (url, init) => {
+    const payload = JSON.parse(init.body);
+    calls.push({ url, method: payload.method, params: payload.params });
+    if (url === 'https://throttled.example') return { ok: false, status: 429 };
+    return { ok: true, status: 200, json: async () => ({ result: {
+      block_hash: 'H100', keys: [entryFor('CLASSICAL_FULL')] } }) };
+  };
+  const rpc = R.makeFallbackRpc(
+    ['https://throttled.example', 'https://healthy.example'],
+    { fetchImpl, delayMs: 10, cooldownMs: 45000,
+      sleep: async (ms) => { clock += ms; }, now: () => clock });
+  const block = { hash: 'H100', height: 100 };
+  const [a, b] = await Promise.all([
+    R.readAccount(rpc, 'a.near', block),
+    R.readAccount(rpc, 'b.near', block),
+  ]);
+  assert.equal(a.status, 'OK');
+  assert.equal(b.status, 'OK');
+  assert.equal(calls.filter((x) => x.url === 'https://throttled.example').length, 1);
+  assert.equal(calls.filter((x) => x.url === 'https://healthy.example').length, 2);
+  assert.ok(calls.every((x) => x.params.block_id === 'H100'));
+  assert.ok(clock >= 20);
+});
