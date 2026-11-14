@@ -8,7 +8,7 @@ const FULL_PQ_PREFIX = 'ml-dsa-65:';
 const ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 
 export const ENDPOINTS = {
-  mainnet: ['https://rpc.mainnet.fastnear.com', 'https://free.rpc.fastnear.com', 'https://rpc.mainnet.near.org'],
+  mainnet: ['https://rpc.mainnet.fastnear.com', 'https://free.rpc.fastnear.com', 'https://archival-rpc.mainnet.fastnear.com', 'https://rpc.mainnet.near.org'],
   testnet: ['https://rpc.testnet.fastnear.com', 'https://rpc.testnet.near.org'],
 };
 

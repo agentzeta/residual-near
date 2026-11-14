@@ -42,6 +42,12 @@ async function connect(network) {
     const rpc = R.makeRpc(endpoint, { retries: 2 });
     try {
       const net = await R.networkInfo(rpc);
+      if (net.chain_id !== network) throw new Error('RPC chain mismatch: ' + net.chain_id);
+      // A status/block response does not establish that the provider serves access-key state.
+      // Probe the exact pinned-block read path before selecting an endpoint.
+      const block = await R.finalizedBlock(rpc);
+      const probe = await R.readAccount(rpc, network === 'mainnet' ? 'wrap.near' : 'testnet', block);
+      if (probe.status !== 'OK') throw new Error('Access-key RPC probe failed: ' + (probe.error || probe.status));
       connections[network] = { endpoint, rpc, net };
       return connections[network];
     } catch (e) { lastErr = e; }
@@ -70,7 +76,7 @@ async function checkAccount(accountId, network) {
     const block = await R.finalizedBlock(conn.rpc);
     const rec = await R.readAccount(conn.rpc, accountId, block);
     const c = R.classifyAccount(rec.account_id, rec.keys, rec.status);
-    const why = c.state === 'UNDETERMINED' ? ' ' + (REASON[c.reason_code] || '') : '';
+    const why = c.state === 'UNDETERMINED' ? ' ' + (REASON[c.reason_code] || '') + (rec.error ? ' RPC detail: ' + rec.error : '') : '';
     const rows = (rec.keys || []).map((k, i) => `<tr><td>${esc(TYPE_LABEL[c.key_types[i]] || c.key_types[i])}</td><td>${esc(permission(k))}</td><td class="key" title="${esc(k.public_key)}">${esc(shortKey(String(k.public_key)))}</td></tr>`).join('');
     const notes = c.notes.length ? `<p class="muted">Notes: ${c.notes.map(esc).join(', ')}</p>` : '';
     out.innerHTML = `<div class="result" data-state="${c.state}">
@@ -138,6 +144,14 @@ async function runSample(nBlocks, size, network) {
     const accounts = records.map((r) => R.classifyAccount(r.account_id, r.keys, r.status));
     const randomDraw = ids.length < signers.length;
     const summary = R.summarize(accounts, randomDraw);
+    if (summary.resolved === 0) {
+      const failures = records.map(x => x.error).filter(Boolean);
+      throw new Error('No account access-key reads succeeded (' + summary.unresolved + '/' + summary.requested +
+        ' unresolved). First RPC error: ' + (failures[0] || 'unavailable') +
+        '. Do not interpret zero counts as zero adoption.');
+    }
+    if (summary.unresolved) warnings.push(summary.unresolved + '/' + summary.requested +
+      ' account reads unresolved; headline denominators include these unknowns.');
     let enrollHtml = '<p class="muted">No account added an ML-DSA-65 key inside this window. Adoption is new; a wider window finds more.</p>';
     let cohort = null;
     const enrollers = [...new Set(enrollments.map((e) => e.account_id).filter((x) => typeof x === 'string'))].sort();
