@@ -152,7 +152,7 @@ async function runSample(nBlocks, size, network) {
     }
     if (summary.unresolved) warnings.push(summary.unresolved + '/' + summary.requested +
       ' account reads unresolved; headline denominators include these unknowns.');
-    let enrollHtml = '<p class="muted">No account added an ML-DSA-65 key inside this window. Adoption is new; a wider window finds more.</p>';
+    let enrollHtml = '<p class="muted">No ML-DSA-65 AddKey event was observed in this short window. This does not measure adoption outside the window.</p>';
     let cohort = null;
     const enrollers = [...new Set(enrollments.map((e) => e.account_id).filter((x) => typeof x === 'string'))].sort();
     if (enrollers.length) {
