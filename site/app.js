@@ -48,7 +48,11 @@ async function connect(network) {
       const block = await R.finalizedBlock(rpc);
       const probe = await R.readAccount(rpc, network === 'mainnet' ? 'wrap.near' : 'testnet', block);
       if (probe.status !== 'OK') throw new Error('Access-key RPC probe failed: ' + (probe.error || probe.status));
-      connections[network] = { endpoint, rpc, net };
+      // Use a paced pool for the expensive block/chunk/account scan. A successful
+      // status and single-key probe alone cannot guarantee remaining RPC quota.
+      const pool = [endpoint, ...list.filter((e) => e !== endpoint)];
+      const pooledRpc = RPC_OVERRIDE ? rpc : R.makeFallbackRpc(pool);
+      connections[network] = { endpoint, rpc: pooledRpc, net, endpoints: pool };
       return connections[network];
     } catch (e) { lastErr = e; }
   }
@@ -64,7 +68,7 @@ function permission(entry) {
 }
 
 function blockLine(conn, block) {
-  return `<div class="meta"><span>${esc(conn.net.chain_id)} · protocol ${esc(conn.net.protocol_version)}</span><span>block ${esc(block.height)}</span><span>hash ${esc(block.hash)}</span><span>${esc(new URL(conn.endpoint).host)}</span></div>`;
+  return `<div class="meta"><span>${esc(conn.net.chain_id)} · protocol ${esc(conn.net.protocol_version)}</span><span>block ${esc(block.height)}</span><span>hash ${esc(block.hash)}</span><span>${esc(new URL(conn.endpoint).host)}${conn.endpoints?.length > 1 ? ' + fallback providers' : ''}</span></div>`;
 }
 
 async function checkAccount(accountId, network) {
@@ -166,7 +170,7 @@ async function runSample(nBlocks, size, network) {
     lastReport = {
       schema: 'residual.near.report.v2-web',
       generated_at: new Date().toISOString(),
-      provenance: { mode: 'LIVE_RPC_BROWSER', block: head, network: conn.net, endpoint: conn.endpoint,
+      provenance: { mode: 'LIVE_RPC_BROWSER', block: head, network: conn.net, endpoint: conn.endpoint, rpc_endpoints: conn.endpoints,
         selection: `seeded random draw of ${ids.length} from ${signers.length} distinct transaction signers in blocks ${frame.lowest_height}-${frame.head_height}; seed = pinned block hash`,
         sampling_frame: frame },
       warnings, summary, accounts, observations: records, cohorts: cohort ? { pq_enrollers: cohort } : {},

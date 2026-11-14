@@ -248,3 +248,49 @@ export async function readAll(rpc, ids, block, concurrency = 4, onEach) {
   await Promise.all(Array.from({ length: Math.min(concurrency, ids.length) }, worker));
   return out;
 }
+
+
+// Browser RPC pool: bounded pacing and provider failover keep public endpoints from
+// being flooded by a multi-chunk scan. Every block-dependent request remains pinned
+// to its original block hash; switching a transport does not change the observation.
+export function makeFallbackRpc(endpoints, {
+  fetchImpl = (...args) => globalThis.fetch(...args),
+  delayMs = 1100,
+  cooldownMs = 45000,
+  sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+  now = () => Date.now()
+} = {}) {
+  if (!Array.isArray(endpoints) || !endpoints.length) throw new Error('At least one RPC endpoint required');
+  const clients = endpoints.map((endpoint) => makeRpc(endpoint, { fetchImpl, retries: 0 }));
+  const blockedUntil = endpoints.map(() => 0);
+  let nextEndpoint = 0, lastStarted = -Infinity;
+  let queue = Promise.resolve();
+  async function request(method, params) {
+    let lastError;
+    for (let visited = 0; visited < clients.length; visited++) {
+      const i = (nextEndpoint + visited) % clients.length;
+      if (blockedUntil[i] > now()) continue;
+      const gap = lastStarted + delayMs - now();
+      if (gap > 0) await sleep(gap);
+      lastStarted = now();
+      try {
+        const result = await clients[i](method, params);
+        nextEndpoint = (i + 1) % clients.length;
+        return result;
+      } catch (e) {
+        lastError = e;
+        if (e.code === 'ACCOUNT_NOT_FOUND') throw e;
+        if (String(e.message).includes('HTTP 429')) blockedUntil[i] = now() + cooldownMs;
+      }
+    }
+    const remaining = Math.min(...blockedUntil.map((t) => Math.max(0, t - now())));
+    const suffix = remaining > 0 ? '; rate-limit cooldown at least ' + Math.ceil(remaining / 1000) + 's' : '';
+    throw new RPCError('Public NEAR RPC providers unavailable: ' +
+      (lastError ? lastError.message : 'all providers in cooldown') + suffix);
+  }
+  return function pooledRpc(method, params) {
+    const result = queue.then(() => request(method, params));
+    queue = result.then(() => {}, () => {});
+    return result;
+  };
+}
