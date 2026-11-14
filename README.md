@@ -29,7 +29,7 @@ The headline claim shows in the demo fixture: four of six accounts "have a post-
 | `site/` | The live web app: landing page, account check, live sample, and recorded mainnet evidence. `site/residual.js` is the browser port of the classifier |
 | `formal/` | Lean 4 model of the classifier with machine-checked proofs |
 | `tests/` | Offline Python tests (including mock-RPC integration) and `tests/web/` for the browser code |
-| `.github/workflows/` | `tests.yml`; `pages.yml` is an optional scheduled report/deployment workflow; the static website is served from `gh-pages`; `live-scan.yml` runs a scan on demand; `demo-video.yml` records the demo video against mainnet |
+| `.github/workflows/` | `tests.yml` validates the classifier; `live-scan.yml` supports manual mainnet measurements; `demo-video.yml` supports optional recording. The website is published from the `gh-pages` branch |
 | `demo/record.cjs` | An optional Playwright demo-recording harness |
 | `docs/` | Reproducible live-run guide, product documentation and demonstration screenshots |
 
