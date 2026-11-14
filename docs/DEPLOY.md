@@ -16,7 +16,7 @@ If the browser shows "No NEAR RPC endpoint answered", the public endpoints are r
 
 To record on your own machine instead: `python3 -m http.server 8000 --directory site &` then `npm install playwright@1.49.1 && npx playwright install chromium && node demo/record.cjs http://127.0.0.1:8000/`.
 
-Keep the site up through judging (16–18 November) and ideally until 25 November.
+
 
 
 ## Fallback when GitHub Actions runners are unavailable
