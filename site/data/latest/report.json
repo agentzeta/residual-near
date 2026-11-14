@@ -1,0 +1,405 @@
+{
+  "schema": "residual.near.report.v2-web",
+  "generated_at": "2026-11-14T22:36:01.858Z",
+  "provenance": {
+    "mode": "LIVE_RPC_BROWSER",
+    "block": {
+      "hash": "GCgeDTJpSUBDJrDCMK6p1Gjv5d31jCHK6rTyvtsCY5uk",
+      "height": 224577581,
+      "prev_hash": "DpBm22ffbW7QvZhCAWimzDFYaTvWC5kskXmY8FB9EE7C",
+      "timestamp_nanosec": "1794695755401884921",
+      "latest_protocol_version": 88
+    },
+    "network": {
+      "chain_id": "mainnet",
+      "protocol_version": 88,
+      "node_version": "2.14.1"
+    },
+    "endpoint": "https://rpc.mainnet.fastnear.com",
+    "selection": "seeded random draw of 5 from 14 distinct transaction signers in blocks 224577579-224577581; seed = pinned block hash",
+    "sampling_frame": {
+      "kind": "distinct transaction signers in a block window",
+      "head_height": 224577581,
+      "head_hash": "GCgeDTJpSUBDJrDCMK6p1Gjv5d31jCHK6rTyvtsCY5uk",
+      "lowest_height": 224577579,
+      "distinct_signers": 14,
+      "pq_enrollment_events": 0,
+      "complete": true,
+      "blocks_requested": 3,
+      "blocks_read": 3,
+      "block_failures": 0,
+      "chunks_read": 30,
+      "chunk_failures": 0,
+      "transactions": 21
+    }
+  },
+  "warnings": [],
+  "summary": {
+    "requested": 5,
+    "resolved": 5,
+    "unresolved": 0,
+    "unresolved_by_reason": {},
+    "counts": {
+      "CLASSICAL_ONLY": 5,
+      "INCOMPLETE_WEAKEST_LINK": 0,
+      "COMPLETE": 0,
+      "PQ_FUNCTION_ONLY": 0,
+      "UNDETERMINED": 0
+    },
+    "pq_key_present": 0,
+    "classical_full_access_present": 5,
+    "interval_95": {
+      "pq_key_present_share_of_resolved": [
+        0,
+        0.43448246478317476
+      ],
+      "classical_full_access_share_of_resolved": [
+        0.5655175352168251,
+        1
+      ],
+      "complete_share_of_resolved": [
+        0,
+        0.43448246478317476
+      ]
+    }
+  },
+  "accounts": [
+    {
+      "account_id": "vx-zec.near",
+      "status": "OK",
+      "key_types": [
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL"
+      ],
+      "notes": [],
+      "state": "CLASSICAL_ONLY",
+      "reason_code": null,
+      "reason": "Observed access-key layer only; not a claim of quantum safety"
+    },
+    {
+      "account_id": "hashkeympc.near",
+      "status": "OK",
+      "key_types": [
+        "CLASSICAL_FULL",
+        "CLASSICAL_FULL",
+        "CLASSICAL_FUNCTION",
+        "CLASSICAL_FUNCTION"
+      ],
+      "notes": [],
+      "state": "CLASSICAL_ONLY",
+      "reason_code": null,
+      "reason": "Observed access-key layer only; not a claim of quantum safety"
+    },
+    {
+      "account_id": "u-cexdex.near",
+      "status": "OK",
+      "key_types": [
+        "CLASSICAL_FULL"
+      ],
+      "notes": [],
+      "state": "CLASSICAL_ONLY",
+      "reason_code": null,
+      "reason": "Observed access-key layer only; not a claim of quantum safety"
+    },
+    {
+      "account_id": "safenode8556.near",
+      "status": "OK",
+      "key_types": [
+        "CLASSICAL_FULL"
+      ],
+      "notes": [],
+      "state": "CLASSICAL_ONLY",
+      "reason_code": null,
+      "reason": "Observed access-key layer only; not a claim of quantum safety"
+    },
+    {
+      "account_id": "12f8ed10ab3f17cdb075e9fa9ef5414c018f7ec6658834ac88c619e22320b3d4",
+      "status": "OK",
+      "key_types": [
+        "CLASSICAL_FULL"
+      ],
+      "notes": [],
+      "state": "CLASSICAL_ONLY",
+      "reason_code": null,
+      "reason": "Observed access-key layer only; not a claim of quantum safety"
+    }
+  ],
+  "observations": [
+    {
+      "account_id": "vx-zec.near",
+      "keys": [
+        {
+          "access_key": {
+            "nonce": 217830054016612,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:BuWwnFX6KSDp4ot2eU7aL1u8RWp3Viu2UZJ4dgTE5jG"
+        },
+        {
+          "access_key": {
+            "nonce": 217830054016768,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:Xq8ryMtEhWkSNmRvJavsAZAn4ZAXJmRFpcBdDCf8b7D"
+        },
+        {
+          "access_key": {
+            "nonce": 217837183016277,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:2p4LUmzWNV6PJt78KwpKv6Z5LmxFN3scKt2GVkwGefxC"
+        },
+        {
+          "access_key": {
+            "nonce": 217837183016305,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:3WEs1vsqjW5TjscyJtZ78nGUGrfTzG9r7Jgk85zmj59f"
+        },
+        {
+          "access_key": {
+            "nonce": 217830054016584,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:3qq19qtVq2kkUPwEDeGytnfvH4jiNbF1TDSDaQCFvDdY"
+        },
+        {
+          "access_key": {
+            "nonce": 217837183016287,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:4eRaaRrFtHnHj6VfkfBaDNBVr3EYnUxsfwvsVTqAydBu"
+        },
+        {
+          "access_key": {
+            "nonce": 217837183016234,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:5GW98uvo3Zrv7u7n7xaEARPTHHnw4qZXVrdAUtgV3UG8"
+        },
+        {
+          "access_key": {
+            "nonce": 217837183016253,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:5Jeq6X9EHZjep4KybV4aAiFTsXmA3vZAKTkw6gx7ajYV"
+        },
+        {
+          "access_key": {
+            "nonce": 217837183016264,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:6z3vWufX6fVakFHbVD4Tk9zUP1S8rWqG2tfWjoBJy9Z2"
+        },
+        {
+          "access_key": {
+            "nonce": 217830054016598,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:8iYbMVdUUHV57xqeJMBuFtqdeEi3gvrmLyBwAWtDd5JU"
+        },
+        {
+          "access_key": {
+            "nonce": 217837183016259,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:9pmRxFjRkmdYaPTXF19JcAxkS6Fjh5anGWKe5PWMtZeS"
+        },
+        {
+          "access_key": {
+            "nonce": 217923654000462,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:9u2X75uPtV93zrvWRo8AYVLPGd191j3ykdvhXrJLoxrN"
+        },
+        {
+          "access_key": {
+            "nonce": 217830054016590,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:ANJavtW6kKF9K4iGaaaVqu1H6sCjaDYwkyfzXGtzxSkp"
+        },
+        {
+          "access_key": {
+            "nonce": 217973893000022,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:BaxdUoa6mXzpDb8JUtiYdnY3NhZ9RM5PBuctPdzdzR9b"
+        },
+        {
+          "access_key": {
+            "nonce": 217837183016252,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:Bg3X8gJCZjP2Q1pjP231nE6Ah7MZLiN79zkG4n4RQbmE"
+        },
+        {
+          "access_key": {
+            "nonce": 217837183016302,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:BmgqkrqDZdXhoNdg5cKGwbfiDw6azAYjLnHgTDLrBwXt"
+        },
+        {
+          "access_key": {
+            "nonce": 217837183016296,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:Cwi8vQp7TDuLUzmKRdFa7cuqr9WS1tLo8tFcY61Xbmbe"
+        },
+        {
+          "access_key": {
+            "nonce": 217837183016310,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:D5zCgQd6gAy1czWGgk8iP14Q9ZcTzkd2PP1soWLfzFD5"
+        },
+        {
+          "access_key": {
+            "nonce": 217837183016242,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:DWw6hP9Se3ucmEpztMhVB3RwZjck2VYMusg57XAbeGx2"
+        },
+        {
+          "access_key": {
+            "nonce": 217828078000298,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:EewVD5dDyyv1vw2zYz6oBsKiR729NyJt3bns9L814wCK"
+        },
+        {
+          "access_key": {
+            "nonce": 217837183016273,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:ExLqE1X2W945qZgWuV5rtjnMzReryqNaXMi8WKBGM7P4"
+        },
+        {
+          "access_key": {
+            "nonce": 217837183016293,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:FBxbPaTHhJvYz9HFWDpbunL8ffHQjPQbD6xFFQ4zNW8i"
+        },
+        {
+          "access_key": {
+            "nonce": 217837183016269,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:GXWzFHxUnuDpYi7kXaj9oSh8P7FeKethgZRgvGeYz4sy"
+        }
+      ],
+      "status": "OK"
+    },
+    {
+      "account_id": "hashkeympc.near",
+      "keys": [
+        {
+          "access_key": {
+            "nonce": 202367509000021,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:5qUMCta8TAZX1Ufftm8ZGjqE1XkMWWJoKL8S64bh2Bj4"
+        },
+        {
+          "access_key": {
+            "nonce": 202366862000002,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:CfJwDhF4G8GdgTwSJ3xRK4SpX7KZpFGa5fHe7FQ6Tbg7"
+        },
+        {
+          "access_key": {
+            "nonce": 224577575000000,
+            "permission": {
+              "FunctionCall": {
+                "allowance": null,
+                "method_names": [],
+                "receiver_id": "v1.signer"
+              }
+            }
+          },
+          "public_key": "ed25519:CqPdKWDBsYHtVYbqqUpe7sqwADbkxf6dLqBaZjnFu6HP"
+        },
+        {
+          "access_key": {
+            "nonce": 202366896000000,
+            "permission": {
+              "FunctionCall": {
+                "allowance": "0",
+                "method_names": [
+                  "__wallet__metadata"
+                ],
+                "receiver_id": "hashkeympc.near"
+              }
+            }
+          },
+          "public_key": "ed25519:FCfcNagNiV9p2HQeuAQ6HN6yTdiuom1z4hyGcTUiPb6Y"
+        }
+      ],
+      "status": "OK"
+    },
+    {
+      "account_id": "u-cexdex.near",
+      "keys": [
+        {
+          "access_key": {
+            "nonce": 222741407017460,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:DD6iRRZuYqQz6SSLLfFB5MEjHauZ2nPp3Q86e6neFjDe"
+        }
+      ],
+      "status": "OK"
+    },
+    {
+      "account_id": "safenode8556.near",
+      "keys": [
+        {
+          "access_key": {
+            "nonce": 205649323247522,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:2wv4Fj7QfUqamM3qWbjsQDzVGkiph9aRvvywL7TAftTt"
+        }
+      ],
+      "status": "OK"
+    },
+    {
+      "account_id": "12f8ed10ab3f17cdb075e9fa9ef5414c018f7ec6658834ac88c619e22320b3d4",
+      "keys": [
+        {
+          "access_key": {
+            "nonce": 218553430073521,
+            "permission": "FullAccess"
+          },
+          "public_key": "ed25519:2H4VRPLkd3eikvLXsSKUXL1PB8nxjJtSR7TSeR2fqRsZ"
+        }
+      ],
+      "status": "OK"
+    }
+  ],
+  "cohorts": {}
+}

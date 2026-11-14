@@ -146,7 +146,7 @@ async function runSample(nBlocks, size, network) {
       prog.innerHTML = `Pinned block <b>${head.height}</b> · ${frame.distinct_signers} signers in blocks ${frame.lowest_height}–${frame.head_height} · reading accounts <b>${done}/${ids.length}</b>`;
     });
     const accounts = records.map((r) => R.classifyAccount(r.account_id, r.keys, r.status));
-    const randomDraw = ids.length < signers.length;
+    const randomDraw = frame.complete && ids.length < signers.length;
     const summary = R.summarize(accounts, randomDraw);
     if (summary.resolved === 0) {
       const failures = records.map(x => x.error).filter(Boolean);
@@ -155,7 +155,7 @@ async function runSample(nBlocks, size, network) {
         '. Do not interpret zero counts as zero adoption.');
     }
     if (summary.unresolved) warnings.push(summary.unresolved + '/' + summary.requested +
-      ' account reads unresolved; headline denominators include these unknowns.');
+      ' accounts have an undetermined migration state; headline denominators include them.');
     let enrollHtml = '<p class="muted">No ML-DSA-65 AddKey event was observed in this short window. This does not measure adoption outside the window.</p>';
     let cohort = null;
     const enrollers = [...new Set(enrollments.map((e) => e.account_id).filter((x) => typeof x === 'string'))].sort();
@@ -215,7 +215,7 @@ async function loadSnapshot() {
     const s = r.summary, pv = r.provenance, n = s.requested;
     const when = new Date(r.generated_at);
     const cohort = r.cohorts && r.cohorts.pq_enrollers;
-    const synthetic = pv.mode === 'SYNTHETIC_FIXTURE' ? '<p class="warn">Synthetic fixture, not NEAR data.</p>' : '';
+    const synthetic = pv.mode === 'SYNTHETIC_FIXTURE' ? '<p class="warn">Synthetic fixture, not NEAR data.</p>' : '<p class="muted">Recorded mainnet observation — not an automatic daily update or a measurement of all NEAR accounts.</p>';
     out.innerHTML = `<div class="result">${synthetic}
       <div class="meta"><span>${esc((pv.network || {}).chain_id)} · protocol ${esc((pv.network || {}).protocol_version)}</span><span>block ${esc(pv.block.height)}</span><span>hash ${esc(pv.block.hash)}</span><span>${esc(when.toUTCString())}</span></div>
       <p class="muted">${esc(pv.selection)}.</p>
@@ -223,11 +223,11 @@ async function loadSnapshot() {
       ${headline(s, n)}
       ${stateBar(s, n)}
       ${cohort ? `<p><b>${cohort.summary.requested}</b> accounts added an ML-DSA-65 key in the window; <b>${cohort.summary.counts.INCOMPLETE_WEAKEST_LINK}</b> still hold a classical full-access key.</p>` : '<p class="muted">No ML-DSA-65 enrollments inside this snapshot\'s window.</p>'}
-      <div class="actions"><a class="btn" href="data/latest/index.html">Full report</a><a class="btn" href="data/latest/report.json">report.json</a><a class="btn" href="data/latest/observations.json">Raw RPC data</a></div>
-      <p class="muted">Report SHA-256 ${esc(r.report_sha256)}</p>
+      <div class="actions"><a class="btn" href="data/latest/report.json">Download recorded JSON (including raw RPC observations)</a></div>
+      ${r.report_sha256 ? '<p class="muted">Report SHA-256 ' + esc(r.report_sha256) + '</p>' : ''}
     </div>`;
   } catch {
-    out.innerHTML = '<p class="muted">No snapshot has been published yet. It appears after the repository\'s "Deploy site" workflow runs.</p>';
+    out.innerHTML = '<p class="muted">No recorded observation currently available. Live account checks and sampling remain available above.</p>';
   }
 }
 

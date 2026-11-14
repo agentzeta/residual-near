@@ -12,10 +12,10 @@ Built at **NEAR HACKATHON 2026** (1–14 November). Tracks: **AI Security & Defe
 
 | Do | See |
 | --- | --- |
-| Open the [live demo](https://agentzeta.github.io/residual-near/), type `near` under **Check an account**, press **Check** | the account's state ("Classical only" for an account with only classical keys), the pinned block height and hash, and every access key with its type and permission |
-| On the same page, press **Run now** under **Live sample** (10 blocks, 50 accounts) | progress through real mainnet blocks, then the headline counts, the state of every sampled account, and any accounts that enrolled an ML-DSA-65 key in that window |
-| `python3 -m unittest discover -s tests -v` (Python 3.9+, no network) | `Ran 40 tests` … `OK` |
-| `node --test tests/web/parity.test.mjs` (Node 18+, no network) | 5 passing tests: the browser classifier matches the Python one on all 128 truth-table rows, the demo fixture and the seeded draw |
+| Open the [live demo](https://agentzeta.github.io/residual-near/), type a normal account ID under **Check an account**, press **Check** | the account's state ("Classical only" for an account with only classical keys), the pinned block height and hash, and every access key with its type and permission |
+| On the same page, press **Run now** under **Live sample** (3 blocks, 5 accounts) | progress through real mainnet blocks, then the headline counts, the state of every sampled account, and any accounts that enrolled an ML-DSA-65 key in that window |
+| `python3 -m unittest discover -s tests -v` (Python 3.9+, no network) | Runs the offline Python unit and integration test suite |
+| `node --test tests/web/parity.test.mjs` (Node 18+, no network) | Runs browser parity, seeded sampling, mocked RPC and rate-limit failover tests |
 | `python3 -m residual --fixture fixtures/demo.json --output demo-output`, then open `demo-output/index.html` | "SYNTHETIC DATA" banner; 4 / 6 accounts with a PQ key, 3 / 6 still holding a classical full-access key, 1 / 6 PQ-only |
 | `python3 -m residual --sample-signers 200 --window-blocks 60 --output live-output` (needs internet) | a live mainnet report pinned to one finalized block; see [docs/LIVE_RUN.md](docs/LIVE_RUN.md) |
 
@@ -26,11 +26,11 @@ The headline claim shows in the demo fixture: four of six accounts "have a post-
 | Path | What it is |
 | --- | --- |
 | `residual/` | Python scanner and classifier (standard library only) and the report dashboard |
-| `site/` | The live web app: landing page, account check, live sample, daily snapshot. `site/residual.js` is the browser port of the classifier |
+| `site/` | The live web app: landing page, account check, live sample, and recorded mainnet evidence. `site/residual.js` is the browser port of the classifier |
 | `formal/` | Lean 4 model of the classifier with machine-checked proofs |
-| `tests/` | 40 Python tests (including an end-to-end run against a mock NEAR RPC) and `tests/web/` for the browser code |
-| `.github/workflows/` | `tests.yml`; `pages.yml` prepares the site and attempts a fresh mainnet snapshot on every push and daily; `live-scan.yml` runs a scan on demand; `demo-video.yml` records the demo video against mainnet |
-| `demo/record.cjs` | The script that records the demo video |
+| `tests/` | Offline Python tests (including mock-RPC integration) and `tests/web/` for the browser code |
+| `.github/workflows/` | `tests.yml`; `pages.yml` is an optional scheduled report/deployment workflow; the static website is served from `gh-pages`; `live-scan.yml` runs a scan on demand; `demo-video.yml` records the demo video against mainnet |
+| `demo/record.cjs` | An optional Playwright demo-recording harness |
 | `docs/` | Reproducible live-run guide, product documentation and demonstration screenshots |
 
 ## Why this measurement matters
@@ -52,6 +52,10 @@ NEAR's ML-DSA-65 keys ([NEP-645](https://github.com/near/NEPs/blob/master/neps/n
 Reason codes for `UNDETERMINED`: `ACCOUNT_NOT_FOUND`, `RPC_ERROR`, `MALFORMED_RESPONSE`, `NO_ACCESS_KEYS` (locked account), `UNRECOGNIZED_KEY`, `CLASSICAL_FUNCTION_ONLY`.
 
 Key recognition: `ed25519:` (32 bytes), `secp256k1:` (64 bytes) and `ml-dsa-65-hash:` (32-byte SHA3-256 handle, the only ML-DSA form access-key lists return). The base58 payload is decoded and its length checked; a full `ml-dsa-65:` key inside a list is flagged as anomalous.
+
+## Recorded mainnet observation
+
+A timestamped, fully resolved **five-account mainnet scan** is included for reproducibility: [methodology and limitations](docs/MAINNET_OBSERVATION.md). It is not a representative sample of NEAR accounts and is not presented as daily monitoring.
 
 ## Demo data
 
