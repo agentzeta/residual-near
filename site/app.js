@@ -241,8 +241,8 @@ document.querySelectorAll('.chip[data-acct]').forEach((b) => b.addEventListener(
 }));
 $('sample-form').addEventListener('submit', (e) => {
   e.preventDefault();
-  const w = Math.max(1, Math.min(120, parseInt($('win').value, 10) || 10));
-  const n = Math.max(1, Math.min(300, parseInt($('size').value, 10) || 50));
+  const w = Math.max(1, Math.min(120, parseInt($('win').value, 10) || 3));
+  const n = Math.max(1, Math.min(300, parseInt($('size').value, 10) || 5));
   runSample(w, n, $('snet').value);
 });
 document.addEventListener('click', (e) => {

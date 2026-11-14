@@ -24,7 +24,7 @@ function pickAccount() {
       }
     }
   } catch (e) { /* no snapshot */ }
-  return 'near';
+  return 'hashkeympc.near';
 }
 
 (async () => {
@@ -80,9 +80,9 @@ function pickAccount() {
   await shot('02-check');
 
   await scrollTo('#sample');
-  await caption('Live sample: every account that signed a transaction in the last 10 blocks, drawn by a seed equal to the block hash.');
-  await page.fill('#win', '10');
-  await page.fill('#size', '50');
+  await caption('Live sample: every account that signed a transaction in the last 3 blocks, drawn by a seed equal to the block hash.');
+  await page.fill('#win', '3');
+  await page.fill('#size', '5');
   await pause(1500);
   await page.click('#sample-btn');
   await pause(2500);
