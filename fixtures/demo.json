@@ -1,0 +1,88 @@
+{
+  "block": {
+    "height": "SYNTHETIC",
+    "hash": "SYNTHETIC"
+  },
+  "accounts": [
+    {
+      "account_id": "mixed-a.testnet",
+      "keys": [
+        {
+          "public_key": "ed25519:GJCZ3LYHFQGNfFaRVAhNVRH373PCjb45H3iGjYqFvUaq",
+          "access_key": {
+            "permission": "FullAccess"
+          }
+        },
+        {
+          "public_key": "ml-dsa-65-hash:Cr5pABqN6YDjGtKAGmryoGfa7ySWXCBHY4VA8UzxxnHW",
+          "access_key": {
+            "permission": "FullAccess"
+          }
+        }
+      ]
+    },
+    {
+      "account_id": "mixed-b.testnet",
+      "keys": [
+        {
+          "public_key": "secp256k1:3XdBjtsMs195v9MmbZiDKLNTCiV5uutcugDKYEgfz8LHAwPA8j3fC8fYrSeZdsedRQv4hmLyjYtJzhzxuoP1itw9",
+          "access_key": {
+            "permission": "FullAccess"
+          }
+        },
+        {
+          "public_key": "ml-dsa-65-hash:45oqp77N2cEaAhWff2phBvj6rHfRW7og9rEWBk6odbDo",
+          "access_key": {
+            "permission": "FullAccess"
+          }
+        }
+      ]
+    },
+    {
+      "account_id": "classical.testnet",
+      "keys": [
+        {
+          "public_key": "ed25519:5gsmTVGNpFizktsiAck5wvQgXD6gkZmGx2u8pt8VR3VY",
+          "access_key": {
+            "permission": "FullAccess"
+          }
+        }
+      ]
+    },
+    {
+      "account_id": "pq-only.testnet",
+      "keys": [
+        {
+          "public_key": "ml-dsa-65-hash:5zLh7dajy9ioogMtobVHbTcwbmG8a7CsTJuWyTyMstde",
+          "access_key": {
+            "permission": "FullAccess"
+          }
+        }
+      ]
+    },
+    {
+      "account_id": "pq-function.testnet",
+      "keys": [
+        {
+          "public_key": "ml-dsa-65-hash:NvktAkf2n8aXXNo8uPDM74bgX7QdmxjeQ7jq7zebVcJ",
+          "access_key": {
+            "permission": {
+              "FunctionCall": {
+                "receiver_id": "example.testnet",
+                "method_names": [
+                  "read"
+                ],
+                "allowance": "1000"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "account_id": "unresolved.testnet",
+      "keys": null,
+      "status": "RPC_ERROR"
+    }
+  ]
+}

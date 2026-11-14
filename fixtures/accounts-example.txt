@@ -1,0 +1,4 @@
+# Convenience sample: chosen by hand, NOT representative of NEAR.
+# Record why you chose each account in your submission notes.
+near
+relay.tg
