@@ -1,17 +1,12 @@
-# Two-minute video walkthrough
+# Demo video
 
-A video is optional: the rules accept screenshots. If time is short, post `docs/screenshots/dashboard-demo.png` instead.
+The video is recorded automatically against NEAR mainnet by **Actions → Record demo video** (see [DEPLOY.md](DEPLOY.md)). It runs about 1.5–2 minutes with on-screen captions:
 
-Record your own voice; keep the synthetic banner visible whenever the demo fixture is on screen.
+1. The problem: adding a post-quantum key does not remove the classical key.
+2. Check an account: a real account from that run's mainnet snapshot (one that enrolled an ML-DSA key if the snapshot found any), read at a pinned block.
+3. Live sample: 10 recent blocks, 50 signers drawn by the block hash, read live from mainnet.
+4. The headline counts and every sampled account, including any ML-DSA enrollers.
+5. The daily snapshot with raw data and digests.
+6. Close: read-only, open source, reproducible.
 
-**0:00–0:15 — Problem.** "NEAR now supports post-quantum ML-DSA-65 keys. But an existing account adds one using its old classical key, and the old key stays. Adding a post-quantum key is not the same as retiring classical authority."
-
-**0:15–0:35 — Run it.** Show `python3 -m residual --fixture fixtures/demo.json --output demo-output`. "This fixture is synthetic, so you can see every case without me inventing mainnet numbers."
-
-**0:35–1:00 — Dashboard.** Point to the three headline cards: "Four of six accounts have a PQ key. Three still hold a classical full-access key. Only one is PQ-only. A naive adoption count would say four; the honest migration count is one."
-
-**1:00–1:30 — Live mainnet.** If you committed a live run, open `evidence/.../index.html`: "Block <height>, a seeded draw of <n> active signers: <x> with a PQ key, <y> still holding classical full access." Show the window, frame size and block hash. If the sample has no PQ adopters, say so: "Adoption is weeks old; this is the baseline." If you did not run it, show the command and say it is not yet run.
-
-**1:30–1:50 — Reproducibility.** Show the provenance block and manifest: chain, protocol version, pinned block hash, seed, digests. "Anyone can rerun this and get the same sample."
-
-**1:50–2:00 — Close.** "Residual is a read-only measurement, not a safety certificate. It reports what the access-key layer shows, and how much it can't see."
+If you would rather narrate it yourself, open the live site, follow the same six steps, and record with your operating system's screen recorder (macOS: Cmd+Shift+5; Windows: Win+Alt+R). Keep it under 2 minutes 20 seconds, X's limit for most accounts.

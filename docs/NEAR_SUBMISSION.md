@@ -1,36 +1,39 @@
 # NEAR HACKATHON — form answers
 
-Copy each field into the official submission form. You can submit only once; corrections go through the organizers' "Request changes" form. Deadline: 14 November 2026, 23:59 UTC (15 November, 05:29 IST).
+The form is the **Submit** section of https://nearhackathon.com. You submit once; mistakes are fixed through https://nearhackathon.com/request-changes. Deadline: 14 November 2026, 23:59 UTC (15 November, 05:29 IST).
 
 | Field | Answer |
 | --- | --- |
-| Project name | Residual — NEAR Post-Quantum Migration Observatory |
-| Team lead | [your name] |
-| Email | [your email] |
-| Team size | 1 |
-| Tracks | AI Security & Defense; Open Innovation |
-| NEAR account for prizes | [an account you created and control, e.g. yourname.near] |
-| Repository | https://github.com/agentzeta/residual-near |
-| Demo post (X) | [link to your post] |
+| Project name | Residual |
+| Team lead | [your full name] |
+| Email address | [the email you want the organizers to use] |
+| Team size | Solo builder |
+| Tracks | AI Security & Defense, Open Innovation |
+| NEAR wallet address | [your own NEAR account, for example yourname.near. Prizes are paid here] |
+| Repository link | https://github.com/agentzeta/residual-near |
+| Demo post link | [the URL of your X post] |
+| What did you build? | The text below |
+| Website | **Leave empty.** The rules file says a filled-in website field is treated as spam and rejects the submission. The live demo link is already in the description and the README |
+| Consent | Read the notice on the form and tick it yourself |
 
-## Project description (about 1,750 characters; the form allows 20 to 2,000)
+## What did you build? (about 1,850 characters; the limit is 2,000)
 
-Paste everything between the lines. If you ran the live scan, replace the last paragraph's bracketed sentence with your numbers; otherwise delete that sentence.
-
----
-
-Residual measures whether NEAR accounts have actually migrated to post-quantum keys, not just added one.
-
-NEAR added ML-DSA-65 access keys (NEP-645, protocol 85) alongside Ed25519 and secp256k1. An existing account adds its first ML-DSA key with a transaction signed by one of its classical full-access keys, so it starts out holding both. Until the owner deletes every classical full-access key, that old key is still a complete, independent way to control the account. Counting "accounts with a PQ key" therefore overstates migration.
-
-Residual is a read-only scanner (Python standard library, no dependencies). It pins one finalized block, reads every sampled account's access keys at that block, and classifies each into five states: classical only, mixed PQ + classical, PQ-only full access, PQ function-call only, or undetermined with a reason code. Unknowns stay in the denominator. The sample is drawn from the chain itself: every distinct transaction signer in a recent block window, drawn by a seed equal to the pinned block hash, so anyone can rebuild it. Accounts that enrolled an ML-DSA key inside the window are read as a separate cohort. Output is a JSON report with provenance and SHA-256 digests, the raw RPC observations, and a static dashboard.
-
-The classifier is modelled in Lean 4 with machine-checked proofs, including that adding a PQ key to a classical-only account can never count as migrated; a test checks the Python code against the model on all 128 input combinations. 40 tests, including an end-to-end run against a mock NEAR RPC.
-
-[At mainnet block HEIGHT, a seeded draw of N active signers found X with a PQ key, Y still holding classical full access, and Z PQ-only.] Residual is a measurement, not a safety certificate.
+Paste everything between the lines. If the daily snapshot has run, you may replace the bracketed sentence with its numbers (from the run page or the live site); otherwise delete it.
 
 ---
 
-## Disclosure (if the form asks)
+Residual checks whether NEAR accounts have actually moved to post-quantum keys, or only added one.
 
-All code was written during the build window (first commit 8 November 2026). An unpublished October prototype of the same idea is not reused. No third-party libraries or templates. AI coding assistants were used for code, tests and documentation.
+NEAR now supports ML-DSA-65 access keys (NEP-645, protocol 85). An existing account adds its first ML-DSA key with a transaction signed by its classical key, so it starts out holding both. Until the owner deletes every classical full-access key, that old key can still do anything the account can. Counting "accounts with a PQ key" overstates migration.
+
+Live demo: https://agentzeta.github.io/residual-near/ — no wallet, nothing to install. Type any account and see its state, read live from NEAR mainnet at one pinned finalized block, with every key and its permission. Or run a live sample: the page walks back through recent blocks, collects every transaction signer, draws a sample seeded by the block hash (so anyone can rebuild it), and classifies each account. Accounts that added an ML-DSA key inside the window, including through meta-transactions, are shown as their own group. A daily 200-account snapshot is published by GitHub Actions with the raw RPC data and SHA-256 digests.
+
+Five states: classical only; mixed PQ + classical; PQ full access only; PQ function-call only; undetermined, always with a reason code. Failed reads and unknown keys stay in the totals.
+
+NEAR's role: the whole product reads NEAR's own data — access-key lists, blocks, chunks and delegate actions over NEAR RPC — to measure a property NEP-645 introduced.
+
+Read-only and open source (MIT). Python standard library and plain JavaScript. The classifier is modelled in Lean 4 with machine-checked proofs, and tests check both the Python and browser code against the model on all 128 input combinations.
+
+[Latest mainnet snapshot: block HEIGHT, X of N sampled accounts with a PQ key, Y still holding classical full access.] It measures the access-key layer only; it is not a safety certificate.
+
+---

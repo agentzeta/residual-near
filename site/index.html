@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Residual — NEAR post-quantum migration check</title>
+<meta name="description" content="Check whether a NEAR account that added a post-quantum key still has a live classical key. Read-only, live from NEAR mainnet.">
+<meta property="og:title" content="Residual — NEAR post-quantum migration check">
+<meta property="og:description" content="Adding a post-quantum key doesn't retire the classical one. Residual checks, live from NEAR mainnet.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23080f1e'/%3E%3Cpath d='M16 6l10 10-10 10L6 16z' fill='none' stroke='%237de1cf' stroke-width='3'/%3E%3C/svg%3E">
+</head>
+<body>
+<header class="bar">
+  <div class="wrap bar-in">
+    <a class="logo" href="#top"><span class="mark" aria-hidden="true"></span>Residual <span class="slash">/ NEAR</span></a>
+    <nav aria-label="Sections">
+      <a href="#check">Check an account</a>
+      <a href="#sample">Live sample</a>
+      <a href="#snapshot">Daily snapshot</a>
+      <a href="#how">How it works</a>
+      <a class="gh" href="https://github.com/agentzeta/residual-near">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero wrap">
+    <p class="eyebrow">Built at NEAR HACKATHON 2026 · read-only · live from NEAR mainnet</p>
+    <h1>Adding a post-quantum key doesn't retire the old one.</h1>
+    <p class="lede">NEAR accounts can now hold ML-DSA-65 keys (NEP-645). An existing account adds one by signing with its classical key, and that classical key keeps full control until the owner deletes it. Residual reads accounts at one pinned block and shows whether classical full-access authority is still live.</p>
+    <div class="cta">
+      <a class="btn primary" href="#check">Check an account</a>
+      <a class="btn" href="#sample">Run a live sample</a>
+    </div>
+    <div class="states" aria-label="The five states">
+      <div><span class="pill CLASSICAL_ONLY">Classical only</span><p>Classical full-access key, no post-quantum key.</p></div>
+      <div><span class="pill INCOMPLETE_WEAKEST_LINK">Mixed</span><p>Post-quantum and classical full access together. The classical key is still a way in.</p></div>
+      <div><span class="pill COMPLETE">PQ full access only</span><p>Post-quantum full access, no classical full access left.</p></div>
+      <div><span class="pill PQ_FUNCTION_ONLY">PQ function-call only</span><p>Post-quantum keys limited to contract calls, no full access.</p></div>
+      <div><span class="pill UNDETERMINED">Undetermined</span><p>Couldn't classify, always with a reason. Kept in the totals.</p></div>
+    </div>
+  </section>
+
+  <section id="check" class="panel wrap">
+    <div class="panel-head">
+      <h2>Check an account</h2>
+      <p>Reads the account's access keys at the latest finalized block, straight from a public NEAR RPC endpoint in your browser.</p>
+    </div>
+    <form id="check-form" class="row" autocomplete="off">
+      <label class="field grow" for="acct">Account ID
+        <input id="acct" name="acct" placeholder="for example alice.near" spellcheck="false" required>
+      </label>
+      <label class="field" for="net">Network
+        <select id="net"><option value="mainnet">Mainnet</option><option value="testnet">Testnet</option></select>
+      </label>
+      <button class="btn primary" id="check-btn" type="submit">Check</button>
+    </form>
+    <p class="try">Try: <button type="button" class="chip" data-acct="near">near</button><button type="button" class="chip" data-acct="wrap.near">wrap.near</button><button type="button" class="chip" data-acct="aurora">aurora</button></p>
+    <div id="check-out" class="out" aria-live="polite"></div>
+  </section>
+
+  <section id="sample" class="panel wrap">
+    <div class="panel-head">
+      <h2>Live sample</h2>
+      <p>Pins the latest finalized block, walks back through recent blocks, collects every account that signed a transaction, and draws a sample seeded by the block hash, so anyone can rebuild the same draw. Accounts that added an ML-DSA-65 key in that window are read as a separate group.</p>
+    </div>
+    <form id="sample-form" class="row">
+      <label class="field" for="win">Blocks to walk back
+        <input id="win" type="number" min="1" max="120" value="10">
+      </label>
+      <label class="field" for="size">Accounts to draw
+        <input id="size" type="number" min="1" max="300" value="50">
+      </label>
+      <label class="field" for="snet">Network
+        <select id="snet"><option value="mainnet">Mainnet</option><option value="testnet">Testnet</option></select>
+      </label>
+      <button class="btn primary" id="sample-btn" type="submit">Run now</button>
+    </form>
+    <div id="sample-progress" class="progress" hidden></div>
+    <div id="sample-out" class="out" aria-live="polite"></div>
+  </section>
+
+  <section id="snapshot" class="panel wrap">
+    <div class="panel-head">
+      <h2>Daily snapshot</h2>
+      <p>A larger mainnet sample, run by the repository's GitHub Actions workflow with the Python scanner and published here with its raw data and digests.</p>
+    </div>
+    <div id="snap-out" class="out"><p class="muted">Loading the latest snapshot…</p></div>
+  </section>
+
+  <section id="how" class="wrap how">
+    <h2>How it works</h2>
+    <ol class="steps">
+      <li><b>Pin one block.</b> Every read uses the hash of one finalized block, so the whole result describes one moment of the chain.</li>
+      <li><b>Read the access keys.</b> <code>view_access_key_list</code> for each account. Each key's prefix and decoded length are checked: <code>ed25519</code> 32 bytes, <code>secp256k1</code> 64, <code>ml-dsa-65-hash</code> 32.</li>
+      <li><b>Classify, and keep the unknowns.</b> Failed reads, missing accounts and unrecognized keys stay in the denominator with a reason code.</li>
+    </ol>
+    <div class="grid2">
+      <div>
+        <h3>Who it's for</h3>
+        <ul>
+          <li><b>Account holders</b> checking whether their own migration is finished.</li>
+          <li><b>Wallets and custodians</b> who need to know which accounts still depend on a classical key.</li>
+          <li><b>Foundations and researchers</b> tracking post-quantum migration with a number anyone can rerun.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>What it does not claim</h3>
+        <ul>
+          <li>"PQ full access only" describes access keys at one block. It is not a certificate of quantum safety.</li>
+          <li>Answers come from the RPC endpoint and are not verified with light-client proofs.</li>
+          <li>The live sample covers recently active signers, not all NEAR accounts.</li>
+          <li>Before deleting any key, confirm your wallet can sign with the key you keep. Deleting your only working key locks you out.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap foot">
+  <p>Residual is open source (MIT): <a href="https://github.com/agentzeta/residual-near">github.com/agentzeta/residual-near</a>. Read-only: it never asks for a wallet, never signs and never sends a transaction. Built at NEAR HACKATHON 2026.</p>
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

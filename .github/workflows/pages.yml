@@ -1,0 +1,44 @@
+name: Deploy site
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Mainnet snapshot (nonblocking: site remains accessible)
+        continue-on-error: true
+        env:
+          FASTNEAR_API_KEY: ${{ secrets.FASTNEAR_API_KEY }}
+        run: python -m residual --sample-signers 200 --window-blocks 60 --output site/data/latest
+      - name: Snapshot status and provenance
+        if: always()
+        run: python scripts/summary.py site/data/latest/report.json >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

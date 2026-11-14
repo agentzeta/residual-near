@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.venv/
+out/
+live-output/
+demo-output/
+demo-video/
+.env

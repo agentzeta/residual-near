@@ -4,21 +4,34 @@
 
 Built at **NEAR HACKATHON 2026** (1–14 November). Tracks: **AI Security & Defense**, **Open Innovation**.
 
+**Hosted demo (when GitHub Pages is enabled and deployed):** https://agentzeta.github.io/residual-near/ — check any NEAR account, or run a live sample, straight from NEAR mainnet in your browser. Nothing to install, no wallet.
+
 ![Residual dashboard on the synthetic demo fixture](docs/screenshots/dashboard-demo.png)
 
 ## Check it in two minutes
 
-Needs Python 3.9 or later. Nothing to install, no keys, no network for steps 1–3.
-
 | Do | See |
 | --- | --- |
-| `python3 -m unittest discover -s tests -v` | `Ran 40 tests` … `OK` |
-| `python3 -m residual --fixture fixtures/demo.json --output demo-output` | JSON summary with `"pq_key_present": 4`, `"classical_full_access_present": 3`, `"COMPLETE": 1`, `"warnings": []` |
-| Open `demo-output/index.html` in a browser | "SYNTHETIC DATA" banner; headline cards 4 / 6 with a PQ key, 3 / 6 still holding a classical full-access key, 1 / 6 PQ-only |
-| `python3 -m unittest tests.test_formal_model -v` | the Python classifier matches the Lean model's truth table on all 128 input combinations |
-| `python3 -m residual --sample-signers 200 --window-blocks 60 --output live-output` (needs internet) | a live NEAR mainnet sample pinned to one finalized block; see [docs/LIVE_RUN.md](docs/LIVE_RUN.md) |
+| Open the [live demo](https://agentzeta.github.io/residual-near/), type `near` under **Check an account**, press **Check** | the account's state ("Classical only" for an account with only classical keys), the pinned block height and hash, and every access key with its type and permission |
+| On the same page, press **Run now** under **Live sample** (10 blocks, 50 accounts) | progress through real mainnet blocks, then the headline counts, the state of every sampled account, and any accounts that enrolled an ML-DSA-65 key in that window |
+| `python3 -m unittest discover -s tests -v` (Python 3.9+, no network) | `Ran 40 tests` … `OK` |
+| `node --test tests/web/parity.test.mjs` (Node 18+, no network) | 5 passing tests: the browser classifier matches the Python one on all 128 truth-table rows, the demo fixture and the seeded draw |
+| `python3 -m residual --fixture fixtures/demo.json --output demo-output`, then open `demo-output/index.html` | "SYNTHETIC DATA" banner; 4 / 6 accounts with a PQ key, 3 / 6 still holding a classical full-access key, 1 / 6 PQ-only |
+| `python3 -m residual --sample-signers 200 --window-blocks 60 --output live-output` (needs internet) | a live mainnet report pinned to one finalized block; see [docs/LIVE_RUN.md](docs/LIVE_RUN.md) |
 
-The headline claim is in the demo: four of six accounts "have a post-quantum key", but only one has actually given up classical full access. A naive adoption count says four; the migration count is one.
+The headline claim shows in the demo fixture: four of six accounts "have a post-quantum key", but only one has given up classical full access. A naive adoption count says four; the migration count is one.
+
+## What's in the repository
+
+| Path | What it is |
+| --- | --- |
+| `residual/` | Python scanner and classifier (standard library only) and the report dashboard |
+| `site/` | The live web app: landing page, account check, live sample, daily snapshot. `site/residual.js` is the browser port of the classifier |
+| `formal/` | Lean 4 model of the classifier with machine-checked proofs |
+| `tests/` | 40 Python tests (including an end-to-end run against a mock NEAR RPC) and `tests/web/` for the browser code |
+| `.github/workflows/` | `tests.yml`; `pages.yml` deploys the site with a fresh 200-account mainnet snapshot on every push and daily; `live-scan.yml` runs a scan on demand; `demo-video.yml` records the demo video against mainnet |
+| `demo/record.cjs` | The script that records the demo video |
+| `docs/` | Live-run guide, submission answers, X post, demo script |
 
 ## Why this measurement matters
 
@@ -78,7 +91,7 @@ Wilson 95% intervals appear only for a seeded random draw. They describe uncerta
 
 ## Boundaries
 
-- Read-only: no signing keys, wallets, payment logic or transaction submission.
+- Read-only: no signing keys, wallets, payment logic or transaction submission. The web app never asks for a wallet.
 - RPC answers are trusted, not verified with light-client proofs; pinning one block gives consistency, not proof.
 - A current snapshot cannot show historical key deletion, contract-based authority, recovery arrangements, validator security or off-chain signers.
 - The active-signer frame over-represents bots, relayers and busy accounts. No ecosystem-wide adoption claim is made.
@@ -86,8 +99,9 @@ Wilson 95% intervals appear only for a seeded random draw. They describe uncerta
 ## Hackathon disclosure
 
 - **When the code was written.** Every commit in this repository is dated within the build window; the first is 8 November 2026. An unpublished single-file prototype of the same idea was written in October 2026, after the hackathon was announced; none of its code is reused here.
-- **Libraries and templates.** None. Python standard library only; Lean 4 (no Mathlib) for the optional formal model.
-- **AI assistance.** AI coding assistants were used to write and review the code, tests and documentation. Every result in this README can be reproduced with the commands above.
+- **Libraries and templates.** None in the scanner or the web app: Python standard library, plain JavaScript and CSS, no framework. Lean 4 (no Mathlib) for the optional formal model. The demo-video workflow installs Playwright and uses ffmpeg only to record the video. The web page loads Google Fonts.
+- **AI-generated code.** AI coding assistants wrote most of the code, tests, web app, workflows and documentation, under the author's direction and review. Every result in this README can be reproduced with the commands above.
+- **Other chains and other projects.** Residual is not deployed on, or ported from, another chain. This is the author's only NEAR HACKATHON entry.
 - **NEAR features used.** NEP-645 ML-DSA-65 access keys (protocol 85), NEAR JSON-RPC (`view_access_key_list`, `block`, `chunk`, `status`) at a pinned finalized block, and meta-transaction (`Delegate`) parsing for the enrollers cohort.
 
 ## License
