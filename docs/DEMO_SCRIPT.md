@@ -8,5 +8,3 @@ The video is recorded automatically against NEAR mainnet by **Actions → Record
 4. The headline counts and every sampled account, including any ML-DSA enrollers.
 5. The daily snapshot with raw data and digests.
 6. Close: read-only, open source, reproducible.
-
-If you would rather narrate it yourself, open the live site, follow the same six steps, and record with your operating system's screen recorder (macOS: Cmd+Shift+5; Windows: Win+Alt+R). Keep it under 2 minutes 20 seconds, X's limit for most accounts.
