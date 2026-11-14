@@ -4,7 +4,7 @@
 
 Built at **NEAR HACKATHON 2026** (1–14 November). Tracks: **AI Security & Defense**, **Open Innovation**.
 
-**Hosted demo (when GitHub Pages is enabled and deployed):** https://agentzeta.github.io/residual-near/ — check any NEAR account, or run a live sample, straight from NEAR mainnet in your browser. Nothing to install, no wallet.
+**Hosted web application:** https://agentzeta.github.io/residual-near/ — check any NEAR account, or run a live sample, straight from NEAR mainnet in your browser. Nothing to install, no wallet.
 
 ![Residual dashboard on the synthetic demo fixture](docs/screenshots/dashboard-demo.png)
 
@@ -19,7 +19,7 @@ Built at **NEAR HACKATHON 2026** (1–14 November). Tracks: **AI Security & Defe
 | `python3 -m residual --fixture fixtures/demo.json --output demo-output`, then open `demo-output/index.html` | "SYNTHETIC DATA" banner; 4 / 6 accounts with a PQ key, 3 / 6 still holding a classical full-access key, 1 / 6 PQ-only |
 | `python3 -m residual --sample-signers 200 --window-blocks 60 --output live-output` (needs internet) | a live mainnet report pinned to one finalized block; see [docs/LIVE_RUN.md](docs/LIVE_RUN.md) |
 
-The headline claim shows in the demo fixture: four of six accounts "have a post-quantum key", but only one has given up classical full access. A naive adoption count says four; the migration count is one.
+The headline claim shows in the demo fixture: four of six accounts "have a post-quantum key", but only one exhibits PQ-only full access in the observed fixture. Adoption and observed access-key transition are different measures.
 
 ## What's in the repository
 
@@ -29,9 +29,9 @@ The headline claim shows in the demo fixture: four of six accounts "have a post-
 | `site/` | The live web app: landing page, account check, live sample, daily snapshot. `site/residual.js` is the browser port of the classifier |
 | `formal/` | Lean 4 model of the classifier with machine-checked proofs |
 | `tests/` | 40 Python tests (including an end-to-end run against a mock NEAR RPC) and `tests/web/` for the browser code |
-| `.github/workflows/` | `tests.yml`; `pages.yml` deploys the site with a fresh 200-account mainnet snapshot on every push and daily; `live-scan.yml` runs a scan on demand; `demo-video.yml` records the demo video against mainnet |
+| `.github/workflows/` | `tests.yml`; `pages.yml` prepares the site and attempts a fresh mainnet snapshot on every push and daily; `live-scan.yml` runs a scan on demand; `demo-video.yml` records the demo video against mainnet |
 | `demo/record.cjs` | The script that records the demo video |
-| `docs/` | Live-run guide, submission answers, X post, demo script |
+| `docs/` | Reproducible live-run guide, product documentation and demonstration screenshots |
 
 ## Why this measurement matters
 
@@ -79,7 +79,7 @@ Step-by-step instructions and what to record: [docs/LIVE_RUN.md](docs/LIVE_RUN.m
 
 ## Formal model
 
-The classifier's logic is modelled in Lean 4 with machine-checked proofs, including that adding a post-quantum key to a classical-only account can never produce `COMPLETE`. A test checks the Python code against the model on all 128 input combinations. See [formal/README.md](formal/README.md).
+The classifier's logic is modelled in Lean 4 with machine-checked proofs, including that adding a post-quantum key to a classical-only account can never produce `COMPLETE`. Parity tests compare both the Python and browser classifiers with the model's 128-case truth table. See [formal/README.md](formal/README.md).
 
 ## What a report contains
 
