@@ -17,3 +17,12 @@ If the browser shows "No NEAR RPC endpoint answered", the public endpoints are r
 To record on your own machine instead: `python3 -m http.server 8000 --directory site &` then `npm install playwright@1.49.1 && npx playwright install chromium && node demo/record.cjs http://127.0.0.1:8000/`.
 
 Keep the site up through judging (16–18 November) and ideally until 25 November.
+
+
+## Fallback when GitHub Actions runners are unavailable
+
+The repository also contains a prebuilt `gh-pages` branch with the static frontend at its root.
+
+In **Settings → Pages → Build and deployment**, choose **Deploy from a branch**, select **gh-pages**, and choose **/(root)**, then save. This branch does not require Actions to build. The account check and browser-side sample can run against public RPC endpoints, but the daily snapshot will only appear once an Actions-based snapshot is successfully published. Never call an empty snapshot a live measurement.
+
+If the `Tests` workflow fails immediately with no assigned runner and no step logs, inspect the Actions banner and repository/account Actions settings; no test outcome has been established. You can run Python and Node tests locally, then publish your exact terminal output.
