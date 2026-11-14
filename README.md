@@ -6,6 +6,10 @@ Built at **NEAR HACKATHON 2026** (1–14 November). Tracks: **AI Security & Defe
 
 **Hosted web application:** https://agentzeta.github.io/residual-near/ — check any NEAR account, or run a live sample, straight from NEAR mainnet in your browser. Nothing to install, no wallet.
 
+Demo screenshots: https://x.com/misskhan/status/2121739131005092198
+
+Demo: https://agentzeta.github.io/residual-near
+
 ![Residual dashboard on the synthetic demo fixture](docs/screenshots/dashboard-demo.png)
 
 ## Check it in two minutes
@@ -107,6 +111,43 @@ Wilson 95% intervals appear only for a seeded random draw. They describe uncerta
 - **AI-generated code.** AI coding assistants wrote most of the code, tests, web app, workflows and documentation, under the author's direction and review. Every result in this README can be reproduced with the commands above.
 - **Other chains and other projects.** Residual is not deployed on, or ported from, another chain. This is the author's only NEAR HACKATHON entry.
 - **NEAR features used.** NEP-645 ML-DSA-65 access keys (protocol 85), NEAR JSON-RPC (`view_access_key_list`, `block`, `chunk`, `status`) at a pinned finalized block, and meta-transaction (`Delegate`) parsing for the enrollers cohort.
+
+## Problem Solved
+NEAR's introduction of ML-DSA-65 post-quantum signatures creates a critical measurement problem: adding a quantum-resistant key does not automatically retire existing classical full-access keys.
+
+An account may therefore appear to have adopted post-quantum cryptography while still allowing transactions authorized by Ed25519 or secp256k1 keys.
+
+Wallet providers, custodians, account holders and ecosystem researchers need a reliable way to distinguish post-quantum key adoption from the actual retirement of classical full-access authority.
+
+Without that distinction, migration statistics can create a misleading picture of security readiness. Residual addresses this measurement gap using observable onchain evidence, while explicitly preserving uncertainty.
+
+## What we built
+Residual is an open-source, read-only post-quantum migration observatory for NEAR.
+
+It examines an account's access keys at a pinned finalized block and classifies the observed state into five categories: classical only, mixed classical/post-quantum authority, post-quantum full access only, post-quantum function-call only, and undetermined.
+
+We built a live browser application, Python command-line scanner, deterministic sampling engine, JSON evidence reports, and a static dashboard. The system records block provenance, distinguishes resolved from unresolved observations, and supports reproducible analysis.
+
+We also developed a Lean 4 formal model and a 128-case truth table to test classification behavior.
+
+A recorded mainnet sample at block 224577581 successfully resolved five accounts. The public demonstration supports live account checks and sampling without connecting a wallet or submitting transactions.
+
+Live demo: https://agentzeta.github.io/residual-near/
+
+## How NEAR fits in 
+
+Residual is built specifically around NEAR's account-access-key model and its introduction of ML-DSA-65 post-quantum signatures through NEP-645.
+
+The application communicates directly with NEAR mainnet using JSON-RPC. It retrieves finalized block information, reads account access keys through view_access_key_list, and examines recent blocks and transactions to construct reproducible samples.
+
+Residual recognizes NEAR's compact ml-dsa-65-hash key representation alongside Ed25519 and secp256k1, while distinguishing full-access permissions from restricted function-call permissions.
+
+NEAR supplies both the post-quantum capability being measured and the onchain observations needed for that measurement.
+
+Because Residual is a read-only security analytics tool, it does not require a smart contract deployment, NEAR Intents, a funded wallet or transaction signing.
+
+
+
 
 ## License
 
