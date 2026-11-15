@@ -41,6 +41,12 @@ The headline claim shows in the demo fixture: four of six accounts "have a post-
 
 NEAR's ML-DSA-65 keys ([NEP-645](https://github.com/near/NEPs/blob/master/neps/nep-0645.md), protocol version 85 / neard 2.13) were added **alongside** Ed25519 and secp256k1, which are not deprecated, and **without asset migration**. An existing account gets its first ML-DSA key through an `AddKey` signed by one of its own classical full-access keys, so an existing account that adopts post-quantum keys starts out holding both kinds. It reaches PQ-only full access only if the owner later deletes every classical full-access key. (A brand-new account can be created with only an ML-DSA key; Residual classifies it as `COMPLETE`.) Counting "accounts with a PQ key" therefore overstates migration. Residual measures both numbers separately.
 
+## Retirement evidence: post-submission extension
+
+The existing `COMPLETE` state means **PQ full access is observed while classical full access is absent in one pinned snapshot**. That is more meaningful than detecting PQ key presence, but it is **not historical proof of key retirement**. A new comparison tool evaluates two ordered observations for the **same account** and tests whether each specifically identified old classical full-access key has disappeared while PQ full access remains. Its result is explicitly labeled as trusted-RPC observational evidence, not an independently verified cryptographic proof.
+
+See [Classical-key retirement evidence](docs/RETIREMENT_EVIDENCE.md). **This module was added after the 14 November 2026 hackathon submission**, not claimed as part of the original entry.
+
 ## Five states (observed access-key layer only)
 
 | State | Definition |
