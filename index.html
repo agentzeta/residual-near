@@ -31,6 +31,7 @@
     <p class="eyebrow">Built at NEAR HACKATHON 2026 · read-only · live from NEAR mainnet</p>
     <h1>Adding a post-quantum key doesn't retire the old one.</h1>
     <p class="lede">NEAR accounts can now hold ML-DSA-65 keys (NEP-645). An existing account adds one by signing with its classical key, and that classical key keeps full control until the owner deletes it. Residual reads accounts at one pinned block and shows whether classical full-access authority is still live.</p>
+    <p class="muted">A single scan checks which access keys exist now. Historical key retirement requires a previous key inventory and a later pinned observation. <a href="https://github.com/agentzeta/residual-near/blob/main/docs/RETIREMENT_EVIDENCE.md">See the post-submission retirement-evidence extension</a> (trusted-RPC evidence; not a cryptographic state proof).</p>
     <div class="cta">
       <a class="btn primary" href="#check">Check an account</a>
       <a class="btn" href="#sample">Run a live sample</a>
