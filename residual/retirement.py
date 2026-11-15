@@ -16,7 +16,7 @@ def _extract(report, account_id):
         observations = report.get('raw_observations')
     if not isinstance(observations, list):
         return None, 'RAW_OBSERVATIONS_MISSING'
-    matches = [x for x in observations if x.get('account_id') == account_id]
+    matches = [x for x in observations if isinstance(x, dict) and x.get('account_id') == account_id]
     if len(matches) != 1:
         return None, 'ACCOUNT_OBSERVATION_MISSING_OR_DUPLICATED'
     record = matches[0]
