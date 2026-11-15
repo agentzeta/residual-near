@@ -10,6 +10,8 @@ Demo screenshots: https://x.com/misskhan/status/2121739131005092198
 
 Demo: https://agentzeta.github.io/residual-near
 
+Demo Video: https://drive.google.com/file/d/1HIS1egG3ZoyJQV_MDjLrMGCDbHHJhiHJ
+
 ![Residual dashboard on the synthetic demo fixture](docs/screenshots/dashboard-demo.png)
 
 ## Check it in two minutes
